@@ -31,6 +31,10 @@ cargo run -- <subcommand> [args]      # via cargo
 ./target/release/organizer <subcommand> [args]   # the built binary
 ```
 
+```bash
+cargo install --path .    # to put organizer in the path to execute directly with organizer
+```
+
 The examples below use `organizer` as shorthand for "the binary".
 
 ---
@@ -62,13 +66,13 @@ Sorts the files directly inside `PATH` into `PATH/<category>/` sub‑folders, us
 the current rules. If `PATH` is omitted, the **current working directory** is
 used.
 
-| Flag | Short | Description |
-|------|-------|-------------|
-| `--dry-run` | `-d` | Print the planned moves without changing anything. |
-| `--output <DIR>` | `-o` | Send organized output to `<DIR>` (see *Known limitations*). |
-| `--keep-original` | `-k` | **Copy** files into the category folder instead of moving them. |
-| `--by <BY>` | `-b` | Reserved; currently ignored (sorting is always by extension). |
-| `--recursive` | `-r` | Also descend into sub‑directories. |
+| Flag              | Short | Description                                                     |
+| ----------------- | ----- | --------------------------------------------------------------- |
+| `--dry-run`       | `-d`  | Print the planned moves without changing anything.              |
+| `--output <DIR>`  | `-o`  | Send organized output to `<DIR>` (see _Known limitations_).     |
+| `--keep-original` | `-k`  | **Copy** files into the category folder instead of moving them. |
+| `--by <BY>`       | `-b`  | Reserved; currently ignored (sorting is always by extension).   |
+| `--recursive`     | `-r`  | Also descend into sub‑directories.                              |
 
 ```bash
 organizer organize ./Downloads
@@ -140,18 +144,18 @@ organizer undo
 Paths are resolved with the `dirs` crate, so they follow each platform's
 conventions. They are **not** relative to where you run the command.
 
-| File | Purpose | Location (via `dirs`) |
-|------|---------|------------------------|
-| `rules.json` | category → extensions | **config dir** `/organizer/rules.json` |
-| `history.json` | last run, for `undo` | **local data dir** `/organizer/history.json` |
+| File           | Purpose               | Location (via `dirs`)                        |
+| -------------- | --------------------- | -------------------------------------------- |
+| `rules.json`   | category → extensions | **config dir** `/organizer/rules.json`       |
+| `history.json` | last run, for `undo`  | **local data dir** `/organizer/history.json` |
 
 Concrete locations:
 
-| Platform | `rules.json` | `history.json` |
-|----------|--------------|-----------------|
-| **macOS** | `~/Library/Application Support/organizer/rules.json` | `~/Library/Application Support/organizer/history.json` |
-| **Linux** | `~/.config/organizer/rules.json` (or `$XDG_CONFIG_HOME`) | `~/.local/share/organizer/history.json` (or `$XDG_DATA_HOME`) |
-| **Windows** | `%APPDATA%\organizer\rules.json` | `%LOCALAPPDATA%\organizer\history.json` |
+| Platform    | `rules.json`                                             | `history.json`                                                |
+| ----------- | -------------------------------------------------------- | ------------------------------------------------------------- |
+| **macOS**   | `~/Library/Application Support/organizer/rules.json`     | `~/Library/Application Support/organizer/history.json`        |
+| **Linux**   | `~/.config/organizer/rules.json` (or `$XDG_CONFIG_HOME`) | `~/.local/share/organizer/history.json` (or `$XDG_DATA_HOME`) |
+| **Windows** | `%APPDATA%\organizer\rules.json`                         | `%LOCALAPPDATA%\organizer\history.json`                       |
 
 These directories are created automatically the first time they're needed.
 
@@ -173,11 +177,11 @@ These directories are created automatically the first time they're needed.
 The tool no longer panics on bad input or filesystem problems. Instead:
 
 - Each failure prints a clear message naming the operation and path, followed by
-  the specific cause (e.g. *"No such file or directory"*, *"Permission denied"*,
-  *"contains invalid JSON: ..."*), and the process exits with status **1**.
+  the specific cause (e.g. _"No such file or directory"_, _"Permission denied"_,
+  _"contains invalid JSON: ..."_), and the process exits with status **1**.
 - Two common situations get actionable hints:
   - running a rules command with no `rules.json` → suggests `add-rule`;
-  - `undo` with no history → *"Nothing to undo"*.
+  - `undo` with no history → _"Nothing to undo"_.
 - During `organize`, if a **single** file cannot be moved/copied (or a
   sub‑directory cannot be read), a `Warning:` is printed for that item and the
   run continues with the rest.
@@ -199,7 +203,7 @@ These are existing behaviors worth knowing before you rely on them:
 
 - **`--by` is ignored.** Sorting is always by file extension regardless of the
   value passed.
-- **`--output` is unusual.** It `rename`s the *entire category folder* to the
+- **`--output` is unusual.** It `rename`s the _entire category folder_ to the
   output path, and it does so once per matched file inside the loop. Review the
   result carefully before depending on this flag.
 - **Recursive `undo` is partial.** With `-r`, history is written separately at
