@@ -56,10 +56,17 @@ pub fn organize_files(
                 continue;
             }
         };
+
+        if entry.file_name().to_string_lossy().starts_with(".") {
+            continue;
+        }
+
         let entry_path = entry.path();
+
 
         if let Some(extension) = entry_path.extension() {
             let ext = extension.to_string_lossy().to_lowercase();
+            
 
             for (category, extensions) in &rules.categories {
                 if extensions.contains(&ext) {
